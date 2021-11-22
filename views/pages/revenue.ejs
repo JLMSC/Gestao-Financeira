@@ -1,0 +1,110 @@
+<%- contentFor('body') %>
+
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-md-4" style="width: 100%;">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <!-- Graph Title -->
+        <h1 class="h2"><b>Receitas</b></h1>
+
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <!-- Create Revenue Button -->
+            <button type="button" class="btn btn-outline-secondary" style="border: 1px solid black; padding-top: 8px; margin-right: 8px;" data-toggle="modal" data-target="#revenueNew"><b>Criar Receita</b></button>
+        </div>
+    </div>
+
+    <!-- Graph canvas. -->
+    <canvas id="revenueChart" style="position: relative; width: 100%;"></canvas>
+
+    <!-- Revenue Data. -->
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <!-- Cols separator. -->
+                    <th scope="col">N°</th>
+                    <th scope="col">Valor</th>
+                    <th scope="col">Descrição</th>
+                    <th scope="col">Ultima modificação</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody style="text-align: left; font-size: 18px;">
+                <!-- Revenue Data values & buttons. -->
+                <% revenue_data.forEach((revenue) => { %>
+                    <tr>
+                        <td><b><%= revenue.id %></b></td>
+                        <td><%= revenue.value %></td>
+                        <td><%= revenue.title %></td>
+                        <td><%= revenue.updatedAt %></td>
+                        <td>
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#revenueEdit" onclick="revenueEdit(<%= revenue.id %>)">Editar</button>
+                            <button class="btn btn-primary btn-danger" data-toggle="modal" data-target="#revenueExclude" onclick="revenueRemove(<%= revenue.id %>)">Excluir</button>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<!-- Makes the graph for revenue page. -->
+<script>
+    let months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
+    let xValues = []
+    let yValues = []
+    let new_revenue_date = ''
+
+    // Insert revenue data in the graph, also converts the data.
+    "<% revenue_data.forEach((revenue) => { %>"
+        new_revenue_date = new Date("<%= revenue.updatedAt %>")
+        xValues.push(`${months[new_revenue_date.getMonth()]} ${new_revenue_date.getDate()}`)
+        yValues.push("<%= revenue.value %>")
+    "<% }) %>"
+
+    // Generate the graph with collected values.
+    new Chart("revenueChart", {
+        type: "line",
+        data: {
+            labels: xValues,
+            datasets: [{
+                data: yValues,
+                borderColor: "green",
+                fill: false
+            }]
+        },
+        options: {
+            legend: { display: false }
+        }
+    })
+</script>
+
+<!-- Trigger revenue new when confirmed. -->
+<script>
+    document.getElementById('revenueNewModalButton').onclick = function () {
+        let newValue = document.getElementById('revenueNewValue').value
+        let newTitle = document.getElementById('revenueNewTitle').value
+        fetch(`/main/revenue/new/${newValue}/${newTitle}`, { method: "POST" })
+        .then(function(response) { document.location.reload() })
+    }
+</script>
+
+<!-- Trigger revenue edit when confirmed. -->
+<script>
+    function revenueEdit(revenueId) {
+        document.getElementById('revenueEditModalButton').onclick = function () {
+            let newValue = document.getElementById('revenueEditValue').value
+            let newTitle = document.getElementById('revenueEditTitle').value
+            fetch(`/main/revenue/edit/${revenueId}/${newValue}/${newTitle}`, { method: "POST" })
+            .then(function(response) { document.location.reload() })
+        }
+    }
+</script>
+
+<!-- Trigger revenue removal when confirmed. -->
+<script>
+    function revenueRemove(revenueId) {
+        document.getElementById('revenueExcludeModalButton').onclick = function () {
+            fetch(`/main/revenue/remove/${revenueId}`, { method: "POST" })
+            .then(function(response) { document.location.reload() })
+        }
+    }
+</script>

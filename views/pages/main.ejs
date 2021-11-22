@@ -1,0 +1,106 @@
+<%- contentFor('body') %>
+
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-md-4" style="width: 100%;">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <!-- Graph Title -->
+        <h1 class="h2"><b>Dashboard</b></h1>
+    </div>
+
+    <!-- Graph canvas. -->
+    <canvas id="revenueChart" style="position: relative; width: 100%;"></canvas>
+
+    <!-- Revenue Data. -->
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <!-- Cols separator. -->
+                    <th scope="col">N°</th>
+                    <th scope="col">Valor</th>
+                    <th scope="col">Descrição</th>
+                    <th scope="col">Ultima modificação</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody style="text-align: left; font-size: 18px;">
+                <!-- Revenue Data values & buttons. -->
+                <% revenue_data.forEach((revenue) => { %>
+                    <tr>
+                        <td><b><%= revenue.id %></b></td>
+                        <td><%= revenue.value %></td>
+                        <td><%= revenue.title %></td>
+                        <td><%= revenue.updatedAt %></td>
+                        <td><b style="color: green;">Receita</b></td>
+                        <td>
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#revenueEdit" onclick="revenueEdit(<%= revenue.id %>)">Editar</button>
+                            <button class="btn btn-primary btn-danger" data-toggle="modal" data-target="#revenueExclude" onclick="revenueRemove(<%= revenue.id %>)">Excluir</button>
+                        </td>
+                    </tr>
+                <% }) %>
+                <!-- Expense Data values & buttons. -->
+                <% expenses_data.forEach((expense) => { %> 
+                    <tr>
+                        <td><b><%= expense.id %></b></td>
+                        <td><%= expense.value %></td>
+                        <td><%= expense.title %></td>
+                        <td><%= expense.updatedAt %></td>
+                        <td><b style="color: red;">Despesa</b></td>
+                        <td>
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#expenseEdit" onclick="expenseEdit(<%= expense.id %>)">Editar</button>
+                            <button class="btn btn-primary btn-danger" data-toggle="modal" data-target="#expenseExclude" onclick="expenseRemove(<%= expense.id %>)">Excluir</button>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<!-- Makes the graph for revenue page. -->
+<script>
+    let months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
+    let xValues = []
+    let revenueValues = []
+    let expenseValues = []
+    let new_revenue_date = ''
+    let new_expense_date = ''
+
+    // Insert revenue data in the graph, also converts the data.
+    "<% revenue_data.forEach((revenue) => { %>"
+        new_revenue_date = new Date("<%= revenue.updatedAt %>")
+        xValues.push(`${months[new_revenue_date.getMonth()]} ${new_revenue_date.getDate()}`)
+        revenueValues.push("<%= revenue.value %>")
+    "<% }) %>"
+
+    // Insert expense data in the graph, also converts the data.
+    "<% expenses_data.forEach((expense) => { %>"
+        new_expense_date = new Date("<%= expense.updatedAt %>")
+        xValues.push(`${months[new_revenue_date.getMonth()]} ${new_revenue_date.getDate()}`)
+        expenseValues.push("<%= expense.value %>")
+    "<% }) %>"
+
+    // Generate the graph with collected values.
+    new Chart("revenueChart", {
+        type: "line",
+        data: {
+            labels: xValues,
+            datasets: [{
+                label: "Receitas",
+                data: revenueValues,
+                borderColor: "green",
+                fill: false
+            }, {
+                label: "Despesas",
+                data: expenseValues,
+                borderColor: "red",
+                fill: false
+            }]
+        },
+        options: {
+            legend: {
+                display: true
+            }
+        }
+    })
+</script>

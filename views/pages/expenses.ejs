@@ -1,0 +1,110 @@
+<%- contentFor('body') %>
+
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-md-4" style="width: 100%;">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <!-- Graph Title -->
+        <h1 class="h2"><b>Despesas</b></h1>
+
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <!-- Create Expense Button -->
+            <button type="button" class="btn btn-outline-secondary" style="border: 1px solid black; padding-top: 8px; margin-right: 8px;" data-toggle="modal" data-target="#expenseNew"><b>Criar Despesa</b></button>
+        </div>
+    </div>
+
+    <!-- Graph canvas. -->
+    <canvas id="expenseChart" style="position: relative; width: 100%;"></canvas>
+
+    <!-- Expense Data. -->
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <!-- Cols separator. -->
+                    <th scope="col">N°</th>
+                    <th scope="col">Valor</th>
+                    <th scope="col">Descrição</th>
+                    <th scope="col">Ultima modificação</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody style="text-align: left; font-size: 18px;">
+                <!-- Expense Data values & buttons. -->
+                <% expenses_data.forEach((expense) => { %> 
+                    <tr>
+                        <td><b><%= expense.id %></b></td>
+                        <td><%= expense.value %></td>
+                        <td><%= expense.title %></td>
+                        <td><%= expense.updatedAt %></td>
+                        <td>
+                            <button class="btn btn-primary" data-toggle="modal" data-target="#expenseEdit" onclick="expenseEdit(<%= expense.id %>)">Editar</button>
+                            <button class="btn btn-primary btn-danger" data-toggle="modal" data-target="#expenseExclude" onclick="expenseRemove(<%= expense.id %>)">Excluir</button>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<!-- Makes the graph for expense page. -->
+<script>
+    let months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
+    let xValues = []
+    let yValues = []
+    let new_expense_date = ''
+
+    // Insert expense data in the graph, also converts the data.
+    "<% expenses_data.forEach((expense) => { %>"
+        new_expense_date = new Date("<%= expense.updatedAt %>")
+        xValues.push(`${months[new_expense_date.getMonth()]} ${new_expense_date.getDate()}`)
+        yValues.push("<%= expense.value %>")
+    "<% }) %>"
+
+    // Generate the graph with collected values.
+    new Chart("expenseChart", {
+        type: "line",
+        data: {
+            labels: xValues,
+            datasets: [{
+                data: yValues,
+                borderColor: "red",
+                fill: false
+            }]
+        },
+        options: {
+            legend: { display: false }
+        }
+    })
+</script>
+
+<!-- Trigger expense new when confirmed. -->
+<script>
+    document.getElementById('expenseNewModalButton').onclick = function () {
+        let newValue = document.getElementById('expenseNewValue').value
+        let newTitle = document.getElementById('expenseNewTitle').value
+        fetch(`/main/expenses/new/${newValue}/${newTitle}`, { method: "POST" })
+        .then(function(response) { document.location.reload() })
+    }
+</script>
+
+<!-- Trigger expense edit when confirmed. -->
+<script>
+    function expenseEdit(expenseId) {
+        document.getElementById('expenseEditModalButton').onclick = function () {
+            let newValue = document.getElementById('expenseEditValue').value
+            let newTitle = document.getElementById('expenseEditTitle').value
+            fetch(`/main/expenses/edit/${expenseId}/${newValue}/${newTitle}`, { method: "POST" })
+            .then(function(response) { document.location.reload() })
+        }
+    }
+</script>
+
+<!-- Trigger expense removel when confirmed. -->
+<script>
+    function expenseRemove(expenseId) {
+        document.getElementById('expenseExcludeModalButton').onclick = function () {
+            fetch(`/main/expenses/remove/${expenseId}`, { method: "POST" })
+            .then(function(response) { document.location.reload() })
+        }
+    }
+</script>

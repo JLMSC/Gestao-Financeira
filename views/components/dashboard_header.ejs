@@ -1,0 +1,198 @@
+<!-- Load the javascript for graph -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+<!-- Header Clock -->
+<div class="clock">
+    <h6 class="clock" id="clock-text"></h6>
+</div>
+
+<!-- Left navigation bar. -->
+<div class="contaier-fluid">
+
+    <!-- Revenue Edit Modal -->
+    <div class="modal fade" id="revenueEdit" tabindex="-1" aria-labelledby="revenueEditLabel" aria-hidden="true">
+        <div class="modal-dialog-centered">
+            <div class="modal-content" style="margin-left: 40%; margin-right: 40%;">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="revenueEditLabel"><b>Confirmar edição de receita</b></h5>
+                    <a type="button" class="btn-close" href="/revenue" data-dismiss="modal"></a>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <label for="revenueEditValue">Novo valor da receita:</label><br>
+                    <input type="number" id="revenueEditValue" name="revenueValue"><br><br>
+                    <label for="revenueEditTitle">Nova descrição da receita:</label><br>
+                    <input type="text" id="revenueEditTitle" name="revenueTitle"><br>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer" style="margin-top: 0px;">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><a style="color: #fff;"><b>Não</b></a></button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="revenueEditModalButton"><a style="color: #fff;"><b>Sim</b></a></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Exclude Modal -->
+    <div class="modal fade" id="revenueExclude" tabindex="-1" aria-labelledby="revenueExcludeLabel" aria-hidden="true">
+        <div class="modal-dialog-centered">
+            <div class="modal-content" style="margin-left: 40%; margin-right: 40%;">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="revenueExcludeLabel"><b>Confirmar exclusão</b></h5>
+                    <a type="button" class="btn-close" href="/revenue" data-dismiss="modal"></a>
+                </div>
+    
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    Tem certeza que deseja <b>excluir</b> esta receita?
+                </div>
+    
+                <!-- Modal Footer -->
+                <div class="modal-footer" style="margin-top: 0px;">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><a style="color: #fff;"><b>Não</b></a></button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="revenueExcludeModalButton"><a style="color: #fff;"><b>Sim</b></a></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue New Modal -->
+    <div class="modal fade" id="revenueNew" tabindex="-1" aria-labelledby="revenueNewLabel" aria-hidden="true">
+        <div class="modal-dialog-centered">
+            <div class="modal-content" style="margin-left: 40%; margin-right: 40%;">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="revenueNewLabel"><b>Criar nova receita</b></h5>
+                    <a type="button" class="btn-close" href="/revenue" data-dismiss="modal"></a>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <label for="revenueNewValue">Valor da receita:</label><br>
+                    <input type="number" id="revenueNewValue" name="revenueValue"><br><br>
+                    <label for="revenueNewTitle">Descrição da receita:</label><br>
+                    <input type="text" id="revenueNewTitle" name="revenueTitle"><br>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer" style="margin-top: 0px;">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><a style="color: #fff;"><b>Não</b></a></button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="revenueNewModalButton"><a style="color: #fff;"><b>Sim</b></a></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Expense New Modal -->
+    <div class="modal fade" id="expenseNew" tabindex="-1" aria-labelledby="expenseNewLabel" aria-hidden="true">
+        <div class="modal-dialog-centered">
+            <div class="modal-content" style="margin-left: 40%; margin-right: 40%;">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="expenseNewLabel"><b>Criar nova despesa</b></h5>
+                    <a type="button" class="btn-close" href="/expenses" data-dismiss="modal"></a>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <label for="expenseNewValue">Valor da despesa:</label><br>
+                    <input type="number" id="expenseNewValue" name="expenseValue"><br><br>
+                    <label for="expenseNewTitle">Descrição da despesa:</label><br>
+                    <input type="text" id="expenseNewTitle" name="expenseTitle"><br>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer" style="margin-top: 0px;">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><a style="color: #fff;"><b>Não</b></a></button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="expenseNewModalButton"><a style="color: #fff;"><b>Sim</b></a></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Expense Edit Modal -->
+    <div class="modal fade" id="expenseEdit" tabindex="-1" aria-labelledby="expenseEditLabel" aria-hidden="true">
+        <div class="modal-dialog-centered">
+            <div class="modal-content" style="margin-left: 40%; margin-right: 40%;">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="expenseEditLabel"><b>Confirmar edição de despesa</b></h5>
+                    <a type="button" class="btn-close" href="/expenses" data-dismiss="modal"></a>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <label for="expenseEditValue">Novo valor da despesa:</label><br>
+                    <input type="number" id="expenseEditValue" name="expenseValue"><br><br>
+                    <label for="expenseEditTitle">Nova descrição da despesa:</label><br>
+                    <input type="text" id="expenseEditTitle" name="expenseTitle"><br>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer" style="margin-top: 0px;">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><a style="color: #fff;"><b>Não</b></a></button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="expenseEditModalButton"><a style="color: #fff;"><b>Sim</b></a></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Expense Exclude Modal -->
+    <div class="modal fade" id="expenseExclude" tabindex="-1" aria-labelledby="expenseExcludeLabel" aria-hidden="true">
+        <div class="modal-dialog-centered">
+            <div class="modal-content" style="margin-left: 40%; margin-right: 40%;">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="expenseExcludeLabel"><b>Confirmar exclusão</b></h5>
+                    <a type="button" class="btn-close" href="/expenses" data-dismiss="modal"></a>
+                </div>
+    
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    Tem certeza que deseja <b>excluir</b> esta despesa?
+                </div>
+    
+                <!-- Modal Footer -->
+                <div class="modal-footer" style="margin-top: 0px;">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><a style="color: #fff;"><b>Não</b></a></button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="expenseExcludeModalButton"><a style="color: #fff;"><b>Sim</b></a></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <%- include('../components/dashboard_navbar') %>
+    </div>
+</div>
+
+<!-- Body content -->
+<div class="bg-white" style="position: fixed; width: 88%; height: 88%; left: 10%; top: 8%; overflow: auto;">
+    <%- body %>
+</div>
+
+<!-- Internal clock -->
+<script>
+    function clock() {
+        let clockElement = document.getElementById("clock-text")
+        let hours = new Date().getHours()
+        let minutes = new Date().getMinutes()
+        let seconds = new Date().getSeconds()
+
+        if (hours > 24) {
+            hours = hours - 24
+        }
+
+        hours = hours < 10 ? "0" + hours : hours
+        minutes = minutes < 10 ? "0" + minutes : minutes
+        seconds = seconds < 10 ? "0" + seconds : seconds
+
+        clockElement.innerHTML = `<b>${hours}:${minutes}:${seconds}</b>`
+    }
+
+    let interval = setInterval(clock, 1000)
+</script>

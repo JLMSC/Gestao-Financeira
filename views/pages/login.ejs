@@ -1,0 +1,38 @@
+<%- contentFor('body') %>
+
+<body class="d-flex text-center bg-dark">
+    <main class="form-signin">
+        <form method="post" action="/login">
+            <!-- Icon field -->
+            <img class="mb-4" src="/icon.png" alt="Gestão Financeira" width="90" height="90">
+            <h1 class="h3 mb-3 fw-normal text-white"><b>Por favor, faça login</b></h1>
+
+            <!-- Login error field -->
+            <% if (error) { %>
+            <div class="alert alert-danger" role="alert">
+                <div>
+                    <%= error %>
+                </div>
+            </div>
+            <% } %>
+
+            <!-- Email field -->
+            <div class="form-floating">
+                <input type="text" class="form-control" id="floatingInput" placeholder="Nome de usuário" name="username">
+                <label for="floatingInput">Nome de Usuário</label>
+            </div>
+
+            <!-- Password field -->
+            <div class="form-floating">
+                <input type="password" class="form-control" id="floatingPassword" placeholder="Senha" name="password">
+                <label for="floatingPassword">Senha</label>
+            </div>
+
+            <!-- Create account text -->
+            <p class="mt-4 mb-3 text-muted">Não é cadastrado? <b><a href="/register">cadastre-se</a></b> agora!</p>
+
+            <!-- Login button -->
+            <button class="w-100 btn btn-lg btn-primary" type="submit">Entrar</button>
+        </form>
+    </main>
+</body>

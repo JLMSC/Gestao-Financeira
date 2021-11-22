@@ -1,0 +1,32 @@
+<!-- Successful registration modal -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog-centered">
+        <div class="modal-content" style="margin-left: 40%; margin-right: 40%;">
+            <!-- Mody Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="registerModalLabel"><b>Conta criada com sucesso!</b></h5>
+                <a type="button" class="btn-close" href="/login"></a>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                Sua conta foi criada! Você será redirecionado em <b>3 segundos</b>.
+                Caso não queira esperar, ou se você não foi redirecionado, <a href="/login"><b>clique aqui</b></a>!
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer" style="margin-top: 0px;">
+                <button type="button" class="btn btn-secondary"><a href="/login" style="color: #fff;"><b>Fechar</b></a></button>
+                <button type="button" class="btn btn-primary"><a href="/login" style="color: #fff;"><b>Ok</b></a></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Trigger the Modal -->
+<script>
+    $(document).ready(function() {
+        $("#registerModal").modal();
+    });
+    setTimeout(function () { window.location.href="/login" }, 3000)
+</script>
